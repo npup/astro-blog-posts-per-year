@@ -1,0 +1,57 @@
+---
+
+import { getMonthName, } from "../../utils/index.ts";
+
+function buildLinksData({yyyy, mm, dd, slug}) {
+    return [{value: yyyy, label: yyyy}, { value: mm, label: getMonthName(mm),}, { value: dd, label: dd}, { value: slug, label: slug }].filter(({value}) => Boolean(value))
+        .reduce((acc, {label, value: param }, idx, arr) => {
+            acc.params.push(param);
+            const date = acc.params.join("/");
+            acc.links.push({
+                path: `/posts/${date}`,
+                label: label,
+                title: `Posts for date ${ date }`,
+                isLastItem: idx === arr.length - 1,
+            });
+            return acc;
+        }, {params: [], links: []}).links;
+}
+
+function getItems({yyyy, mm, dd, slug}) {
+    if (!yyyy) {
+        return null;
+    }
+    return [
+        {
+            path: "/posts",
+            label: "Posts",
+            title: "",
+            isLastItem: false,
+        },
+        ...buildLinksData({yyyy, mm, dd, slug})
+    ];
+}
+
+const items = getItems(Astro.props);
+---
+
+{
+    items ?
+        <div>
+            {
+                items.map(({ label, path, title, isLastItem }) => (
+                    <div style="display: inline-block; margin-right: .5rem;">
+                        {
+                            isLastItem ?
+                                <span>{label}</span> :
+                                <span>
+                                    <a href={path} title={title}>{label}</a>
+                                    <span style="display: inline-block; margin-left: .5rem;">&rtrif;</span>
+                                </span>                    
+                        }                
+                    </div>
+                ))
+            }
+        </div> :
+        null
+}

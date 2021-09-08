@@ -1,0 +1,28 @@
+---
+import Layout from "$/layouts/posts/index.astro";
+import PostPreview from "$/components/astro/PostPreview.astro";
+
+import { createPostsFromRaw, groupPostsByPath } from "$/utils/content/index.ts";
+
+/** --START: code for building pages */
+export async function getStaticPaths() {
+    const rawPosts = Astro.fetchContent("$/content/posts/**/*.md");
+    const sortedPosts = createPostsFromRaw(rawPosts);
+    // array with data for a page's path params its props (content),
+    // one item per page to generate
+    const arr = groupPostsByPath(sortedPosts, "yyyy/mm/dd");        
+    return arr;
+}
+/** --END: code for building pages */
+
+
+// This page's content, to render below
+const { posts } =  Astro.props;
+---
+<Layout>
+
+    {
+        posts.map((post: IPost) => <PostPreview post={post} />)
+    }
+
+</Layout>

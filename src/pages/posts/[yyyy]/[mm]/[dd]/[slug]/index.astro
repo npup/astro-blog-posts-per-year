@@ -1,0 +1,45 @@
+---
+import Layout from "$/layouts/posts/index.astro";
+
+import { createPostsFromRaw } from "$/utils/content/index.ts";
+
+
+/** --START: code for building pages */
+export async function getStaticPaths() {
+    const rawPosts = Astro.fetchContent("$/content/posts/**/*.md");
+    const sortedPosts = createPostsFromRaw(rawPosts);
+    // array with data for a page's path params its props (content),
+    // one item per page to generate
+    const arr = sortedPosts.map(post => {
+        const { yyyy, mm, dd, slug, } = post.path;
+        const data = {
+            params: {
+                yyyy, mm, dd, slug,
+            },
+            props: {
+                post
+            }
+        };
+        return data;
+    });
+  return arr;
+}
+/** --END: code for building pages */
+
+// This page's content, to render below
+const { post } =  Astro.props;
+---
+<Layout>
+
+    <article>                    
+        <div>
+            <h1>{post.data.title}</h1>
+            <div>{post.data.date}</div>
+        </div>
+        
+        <div>
+            { post.html }
+        </div>
+    </article>
+
+</Layout>

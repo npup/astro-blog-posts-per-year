@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../main.astro";
+import PostsBreadcrumbs from "../../components/astro/PostsBreadcrumbs.astro";
+
+---
+<BaseLayout { ...Astro.props } pageTitle="Posts">
+
+    <PostsBreadcrumbs { ...Astro.request.params } />
+
+    <slot />
+
+</BaseLayout>

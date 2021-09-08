@@ -1,0 +1,36 @@
+---
+import Layout from "$/layouts/posts/index.astro";
+import PostPreview from "$/components/astro/PostPreview.astro";
+import PostsBySection from "$/components/astro/PostsBySection.astro";
+import { Markdown } from "astro/components";
+
+import {createPostsFromRaw, partitionBySection, } from "$/utils/content/index.ts";
+
+const rawPosts = Astro.fetchContent("$/content/posts/**/*.md");
+const maxPostsShow = 50;
+const posts = createPostsFromRaw(rawPosts, { limit: maxPostsShow });
+
+function getCandidate({yyyy, mm, dd}) {
+    return {
+        path: `/posts/${yyyy}`,
+        label: yyyy,
+        token: yyyy,
+    };
+}
+const postsBySection = partitionBySection(posts, getCandidate);
+---
+
+<Layout>
+
+    <Markdown>
+        # Posts
+        Overview page
+    </Markdown>
+
+    <p>
+        There is a total of {rawPosts.length} post/s, showing at the most <em>{maxPostsShow}</em> of them here.
+    </p>
+
+    <PostsBySection sections={postsBySection} />
+
+</Layout>

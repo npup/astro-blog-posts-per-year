@@ -1,0 +1,13 @@
+---
+import removeMarkdown from "remove-markdown";
+const { post } = Astro.props;
+
+---
+
+<article>
+    <div>
+        <h1><a href={post.path.full}>{post.data.title}</a></h1>
+        <div>{post.data.date}</div>
+    </div>
+    <p>{post.excerpt}</p>
+</article>

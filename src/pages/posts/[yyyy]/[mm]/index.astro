@@ -1,0 +1,34 @@
+---
+import Layout from "$/layouts/posts/index.astro";
+import PostsBySection from "$/components/astro/PostsBySection.astro";
+
+import { createPostsFromRaw, groupPostsByPath, partitionBySection } from "$/utils/content/index.ts";
+
+/** --START: code for building pages */
+export async function getStaticPaths() {
+    const rawPosts = Astro.fetchContent("$/content/posts/**/*.md");
+    const sortedPosts = createPostsFromRaw(rawPosts);
+    // array with data for a page's path params its props (content),
+    // one item per page to generate
+    const arr = groupPostsByPath(sortedPosts, "yyyy/mm");    
+    return arr;
+}
+function getCandidate({yyyy, mm, dd}) {
+    return {
+        path: `/posts/${yyyy}/${mm}/${dd}`,
+        label: dd,
+        token: dd,
+    };
+}
+/** --END: code for building pages */
+
+// This page's content, to render below
+const { posts } =  Astro.props;
+const postsBySection = partitionBySection(posts, getCandidate);
+---
+
+<Layout>
+
+    <PostsBySection sections={postsBySection} />
+
+</Layout>

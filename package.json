@@ -1,0 +1,20 @@
+{
+  "name": "astro-blog-posts-per-year",
+  "author": {
+    "email": "petter.envall@gmail.com",
+    "name": "P. Envall"
+  },
+  "version": "0.0.1",
+  "scripts": {
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "devDependencies": {
+    "astro": "^0.20.4"
+  },
+  "dependencies": {
+    "css-to-go": "^1.0.3",
+    "remove-markdown": "^0.3.0"
+  }
+}

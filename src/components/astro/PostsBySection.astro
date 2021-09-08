@@ -1,0 +1,21 @@
+---
+import PostPreview from "./PostPreview.astro";
+const { sections } = Astro.props;
+---
+{
+    sections.map((section: IPartitionedSection) => {
+        const { path, label, posts } = section;
+        return (
+            <section>
+                <a href={path}>
+                    <h2>
+                        {label}
+                    </h2>
+                </a>
+                <div>
+                    { posts.map((post: IPost) => <PostPreview post={post} />) }
+                </div>
+            </section>
+        );
+    })
+}
